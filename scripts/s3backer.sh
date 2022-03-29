@@ -27,7 +27,7 @@ function Uninstall_s3backer() {
 function MountBackend() {
     echo "MountBackend  s3backer..."
     mkdir -p ${CACHE_DIR}/backend
-	 OVERALL_SIZE=256G
+    OVERALL_SIZE=256G
 
 	# disabling caching
    # --blockCacheFile=${CACHE_DIR}/block_cache_file
@@ -39,6 +39,7 @@ function MountBackend() {
             --region=${AWS_DEFAULT_REGION}  \
             --blockSize=4M \
             --size=$OVERALL_SIZE \
+	    --baseURL=${END_POINT}/ \
             ${BUCKET_NAME} ${CACHE_DIR}/backend
     CheckMount ${CACHE_DIR}/backend
     echo "MountBackend  s3backer done"
@@ -48,7 +49,7 @@ function MountBackend() {
 # //////////////////////////////////////////////////////////////////
 function CreateBucket() {
     echo "CreateBucket  s3backer..."
-    aws s3api create-bucket --bucket ${BUCKET_NAME} --region ${AWS_DEFAULT_REGION}
+    aws --endpoint-url ${END_POINT:?} s3api create-bucket --bucket ${BUCKET_NAME} --region ${AWS_DEFAULT_REGION}
     MountBackend
     mkfs.ext4 \
         -E nodiscard \

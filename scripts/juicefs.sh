@@ -24,18 +24,14 @@ function Uninstall_juicefs() {
 # //////////////////////////////////////////////////////////////////
 function CreateBucket() {
     echo "CreateBucket  juicefs..."
-    juicefs auth \
-        ${BUCKET_NAME} \
-        --token ${JUICE_TOKEN} \
-        --accesskey ${AWS_ACCESS_KEY_ID} \
-        --secretkey ${AWS_SECRET_ACCESS_KEY}  
+    aws --endpoint-url ${END_POINT:?} s3api create-bucket --bucket ${BUCKET_NAME:?}s --region ${AWS_DEFAULT_REGION:?}
     echo "CreateBucket  juicefs done"
 }
 
 # //////////////////////////////////////////////////////////////////
 function RemoveBucket() {
     # note: there is a prefix (!)
-	aws s3 rb s3://juicefs-${BUCKET_NAME} --force
+	aws s3 rb s3://juicefs-${BUCKET_NAME}--force
 }
 
 # //////////////////////////////////////////////////////////////////
@@ -44,7 +40,7 @@ function FuseUp() {
     sync && DropCache
     mkdir -p ${TEST_DIR}
     juicefs mount \
-        ${BUCKET_NAME} \
+        ${BUCKET_NAME}s \
         ${TEST_DIR} \
         --cache-dir=${CACHE_DIR} \
         --log=${LOG_DIR}/log.log \
