@@ -74,7 +74,7 @@ function CleanAll() {
 		for it in $__buckets__; do 
 			echo "Removing bucket $it"
 			echo "aws s3 rb s3://$it --force "
-			aws s3 rb s3://$it --force 
+			aws --endpoint-url ${END_POINT:?} s3 rb s3://$it --force 
 		done
 
 		# remove bucket dir
@@ -87,7 +87,7 @@ function CleanAll() {
 	$(mount | grep ${BUCKETS_DIR} | cut -d" " -f3)
 
 	echo "Existing remote buckets:"
-	$(aws s3 ls | grep "nsdf-fuse-test" | cut -d" " -f3)
+	$(aws --endpoint-url ${END_POINT:?} s3 ls | grep "nsdf-fuse-test" | cut -d" " -f3)
 
 	echo "Content of ${BUCKETS_DIR}:"
 	find ${BUCKETS_DIR}/ 2>/dev/null || true
@@ -278,13 +278,13 @@ function InstallFIO() {
 # //////////////////////////////////////////////////////////////////
 function CreateBucket()
 {
-	aws s3api create-bucket --bucket ${BUCKET_NAME:?} --region ${AWS_DEFAULT_REGION:?}
+	aws s3api create-bucket --bucket ${BUCKET_NAME:?} --region ${AWS_DEFAULT_REGION:?} --endpoint-url=${END_POINT:?}
 }
 
 # //////////////////////////////////////////////////////////////////
 function RemoveBucket() {
 	# note: there is a prefix
-	aws s3 rb s3://${BUCKET_NAME:?} --force
+	aws --endpoint-url ${END_POINT:?} s3 rb s3://${BUCKET_NAME:?} --force
 }
 
 # //////////////////////////////////////////////////////////////////
