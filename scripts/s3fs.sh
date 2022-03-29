@@ -50,13 +50,14 @@ function FuseUp() {
 	 # see https://github.com/s3fs-fuse/s3fs-fuse/issues/1016
     s3fs ${BUCKET_NAME} ${TEST_DIR} \
         -o passwd_file=${HOME}/.s3fs \
-        -o endpoint=${AWS_DEFAULT_REGION} \
+	-o url=${END_POINT} \
         -o cipher_suites=AESGCM \
         -o max_background=1000 \
         -o multipart_size=52 \
         -o parallel_count=30 \
         -o multireq_max=30 \
-        -o allow_other 
+        -o allow_other \
+        -o nonempty
 
     CheckMount ${TEST_DIR}
     echo "FuseUp s3fs done"
@@ -68,6 +69,7 @@ function FuseDown() {
     echo "FuseDown s3fs..."
     sync && DropCache
     Retry umount ${TEST_DIR}
+    echo "Umount"
     Retry rm -Rf ${BASE_DIR}
     echo "FuseDown s3fs done"
 }
