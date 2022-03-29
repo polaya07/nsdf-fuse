@@ -38,7 +38,7 @@ function FuseUp() {
         --max-flushers 32 \
         --max-parallel-parts 32 \
         --part-sizes 25 \
-        --endpoint https://s3.${AWS_DEFAULT_REGION}.amazonaws.com \
+        --endpoint=${END_POINT} \
         ${BUCKET_NAME} \
         ${TEST_DIR}
     CheckMount ${TEST_DIR}
