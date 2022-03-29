@@ -15,7 +15,7 @@ provider=Other
 access_key_id=${AWS_ACCESS_KEY_ID}
 secret_access_key=${AWS_SECRET_ACCESS_KEY}
 region=${AWS_DEFAULT_REGION} 
-endpoint=https://s3.${AWS_DEFAULT_REGION}.amazonaws.com
+endpoint=${END_POINT}
 EOF
 	chmod 600 ~/.config/rclone/rclone.conf
 
@@ -50,7 +50,7 @@ function FuseUp() {
         nsdf-test-rclone:${BUCKET_NAME} \
         ${TEST_DIR} \
 		  --daemon \
-        --cache-dir ${CACHE_DIR} 
+        --cache-dir ${CACHE_DIR} --allow-non-empty
     
     CheckMount ${TEST_DIR}
     echo "FuseUp rclone done"
